@@ -41,6 +41,7 @@ MainSection.propTypes = {
   todosCount: PropTypes.number.isRequired,
   completedCount: PropTypes.number.isRequired,
   actions: PropTypes.exact({
+    initTodos: PropTypes.func.isRequired,
     addTodo: PropTypes.func.isRequired,
     deleteTodo: PropTypes.func.isRequired,
     editTodo: PropTypes.func.isRequired,

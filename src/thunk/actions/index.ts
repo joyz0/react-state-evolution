@@ -1,8 +1,12 @@
+import { ThunkAction } from 'redux-thunk'
+import { CombinedTodoState } from '../reducers'
 import * as types from '../constants/ActionTypes'
 import { Todos } from '../reducers/todos'
+import { fetchTodos } from '../services'
 import { ActionCreator, AnyAction } from 'redux'
 
 export interface ActionCreators {
+  initTodosAsync: typeof initTodosAsync
   initTodos: typeof initTodos
   addTodo: typeof addTodo
   deleteTodo: typeof deleteTodo
@@ -12,6 +16,27 @@ export interface ActionCreators {
   clearCompleted: typeof clearCompleted
   setVisibilityFilter: typeof setVisibilityFilter
 }
+
+export const initTodosAsync: () => ThunkAction<
+  Promise<void>,
+  CombinedTodoState,
+  unknown,
+  ReturnType<ActionCreators['initTodos']>
+> = () => {
+  return async (dispatch, getState) => {
+    try {
+      const res = await fetchTodos()
+      if (res.data.success) {
+        dispatch(initTodos(res.data.todos))
+      } else {
+        throw new Error('加载todos失败')
+      }
+    } catch (e) {
+      console.log(e.message)
+    }
+  }
+}
+
 export const initTodos: ActionCreator<AnyAction> = (todos: Todos) => ({
   type: types.INIT_TODOS,
   todos

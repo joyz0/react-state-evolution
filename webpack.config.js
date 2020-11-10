@@ -1,5 +1,6 @@
 const path = require('path')
 const chalk = require('chalk')
+const apiMocker = require('mocker-api')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 
@@ -42,11 +43,15 @@ module.exports = {
   },
   devtool: 'inline-source-map',
   devServer: {
-    contentBase: './dist'
+    contentBase: './dist',
+    before(app) {
+      apiMocker(app, path.resolve('./mock/index.js'))
+    }
   },
   externals: {
     react: 'React',
-    'react-dom': 'ReactDOM'
+    'react-dom': 'ReactDOM',
+    axios: 'axios'
   },
   plugins: [
     new CleanWebpackPlugin({ cleanStaleWebpackAssets: false }),
