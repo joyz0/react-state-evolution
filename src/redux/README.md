@@ -39,7 +39,8 @@ function bindActionCreator<A extends AnyAction = AnyAction>(
 function dispatch(action: AnyAction): AnyAction {}
 ```
 
-但是在 react-redux v7 版本之后，出现了 useSelector 这个 hook，它能直接获取 Provider 包裹下的 state，再使用 useDispatch 获取 dispatch 来提交 action。
+但是在 react-redux v7 版本之后，出现了 useSelector 这个 hook，它能直接获取 Provider 包裹下的 state，再使用 useDispatch 获取 dispatch 来提交 action。有篇关于 useSelector 争议的讨论[如何看待 react-redux@7 的 useSelector API？
+](https://www.zhihu.com/question/332090851/answer/730617297)。
 
 对比 connect 和 useSelector 两种形式来看，我认为其本质依然都是依靠 Context.Provider 的传递能力，connect 采用了高阶组件的形式把从 Provider 分发的数据传递给低阶组件，而 useSelector 则直接在组件内部使用 useContext 获取上下文中的状态，无需高阶化处理，这要归功于 hooks 赋予函数式组件的能力（没看过 react-redux 源码，是否利用了 Context.Provider 和 useContext 待进一步确认）。
 
