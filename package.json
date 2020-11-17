@@ -8,7 +8,8 @@
   "scripts": {
     "dev:redux": "cross-env DEV_TYPE=redux webpack serve",
     "dev:thunk": "cross-env DEV_TYPE=thunk webpack serve",
-    "dev:saga": "cross-env DEV_TYPE=saga webpack serve"
+    "dev:saga": "cross-env DEV_TYPE=saga webpack serve",
+    "dev:dva": "cross-env DEV_TYPE=dva webpack serve"
   },
   "devDependencies": {
     "@types/classnames": "^2.2.11",
@@ -35,6 +36,7 @@
   "dependencies": {
     "axios": "^0.21.0",
     "classnames": "^2.2.6",
+    "dva": "2.6.0-beta.19",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-redux": "^7.2.2",
