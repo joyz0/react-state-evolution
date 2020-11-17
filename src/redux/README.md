@@ -68,4 +68,4 @@ function dispatch(action: AnyAction): AnyAction {}
 
 可以发现，在不使用任何中间件的情况下，redux 只能 dispatch 同步 action，也就是在异步方法的回调函数中进行 dispatch，这本身并没有什么问题，所以纯 redux 也是能够胜任异步操作场景的。
 
-那么怎么会有 redux-thunk 或 redux-saga 这类库出现呢？我认为是把异步的逻辑从组件剥离。
+那么怎么会有 redux-thunk 或 redux-saga 这类库出现呢？我认为目的是把异步的逻辑从组件剥离，更易于代码测试和维护。
