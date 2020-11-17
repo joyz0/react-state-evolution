@@ -8,7 +8,7 @@ redux-saga 的实现原理可以参考[浅析 redux-saga 实现原理](https://z
 
 ## 核心概念
 
-redux-saga 基于 redux 的扩展能力，对原生的 dispatch 进行了包装。当接收到组件提交的 action 后，首先会触发 reducer，之后再被 rootSaga 消费，注意所有经由 saga 的 put effect 提交的 action 会标记 `action[SAGA_ACTION] = true`。要注意同一个 action 是否被 reducer 和 saga 同时命中，导致执行多次，因此个人认为一些同步 action 没必要写进 saga。
+redux-saga 基于 redux 的扩展能力，对原生的 dispatch 进行了包装。当接收到组件提交的 action 后，首先会触发 reducer，之后再被 saga 消费，注意所有经由 saga 的 put effect 提交的 action 会标记 `action[SAGA_ACTION] = true`，并且同一个 action 是会被 reducer 和 saga 同时命中的，导致执行多次，因此个人认为一些同步 action 没必要写进 saga。
 
 redux-saga 中有三个概念：buffer、channel 和 task。
 
@@ -112,7 +112,7 @@ task(mainSaga)
 
 ## 模拟实现
 
-一个 task 容器需要对应的一个 channel 实例来建立一个事件模型，作用是提供注册 take 方法，能够响应 put 事件，执行一次 take 方法，然后销毁他，take 方法能够让 generator 函数向下执行。
+结合上文 task 的简单实现，
 
 ```js
 function channel() {
@@ -137,7 +137,7 @@ const chan = channel()
 function dispatch(action) {
   chan.put(action)
 }
-// 所以yield take(pattern)会在当前执行容器对应的channel中注册一个taker函数
+// yield take(pattern)会在当前执行容器对应的channel中注册一个taker函数
 function runTakeEffect(effect, next) {
   chan.take((input) => {
     next(input)
@@ -146,6 +146,7 @@ function runTakeEffect(effect, next) {
 $btn.addEventListener(
   'click',
   () => {
+    // 提交action
     dispatch(action)
   },
   false
