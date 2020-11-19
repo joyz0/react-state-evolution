@@ -5,36 +5,31 @@ hooks 在我的理解中，其封装的逻辑是可被不同组件复用的，�
 可能有的人会觉得，hooks 的优势就是高可复用性啊！但这仅仅是指逻辑复用，那么 hooks 能否在组件状态的共享上发挥一定作用呢？我在使用 umi 时接触到了@umijs/plugin-model，它使用起来就是个自定义 hook，
 
 ```js
-// src/models/useAuthModel.js
-import { useState, useCallback } from 'react'
-export default function useAuthModel() {
-  const [user, setUser] = useState(null)
-  const signin = useCallback((account, password) => {
-    // signin implementation
-    // setUser(user from signin API)
-  }, [])
-  const signout = useCallback(() => {
-    // signout implementation
-    // setUser(null)
-  }, [])
-  return {
-    user,
-    signin,
-    signout
-  }
+// src/models/useCounter.js
+import React, { useState } from 'react'
+export default () => {
+  const [counter, setCounter] = useState(0)
+  const increment = () => setCounter((c) => c + 1)
+  const decrement = () => setCounter((c) => c - 1)
+  return { counter, increment, decrement }
 }
 ```
 
-如上我们定义了一个自定义 hook，放在 models/useAuthModel.js 文件中，umi 约定在 src/models 目录下的文件为项目定义的 model 文件。每个文件需要默认导出一个 function，该 function 定义了一个 Hook，不符合规范的会被过滤掉。文件名对应最终 model 的 name，我们可以通过插件提供的 API 来消费 model 中的数据，就像这样，
+如上我们定义了一个自定义 hook，放在 models/useCounter.js 文件中，umi 约定在 src/models 目录下的文件为项目定义的 model 文件。每个文件需要默认导出一个 function，该 function 定义了一个 Hook，不符合规范的会被过滤掉。文件名对应最终 model 的 name，我们可以通过插件提供的 API 来消费 model 中的数据，就像这样，
 
 ```js
+import React from 'react'
 import { useModel } from 'umi'
+
 export default () => {
-  const { user, fetchUser } = useModel('user', (model) => ({
-    user: model.user,
-    fetchUser: model.fetchUser
-  }))
-  return <>hello</>
+  const { counter, increment, decrement } = useModel('counter')
+  return (
+    <>
+      <h2 data-testid="count">{counter}</h2>
+      <button onClick={increment}>add</button>
+      <button onClick={decrement}>minus</button>
+    </>
+  )
 }
 ```
 
