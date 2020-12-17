@@ -157,7 +157,7 @@ $btn.addEventListener(
 
 ### put
 
-会将 action 加入调度中心，并一定立即执行原生 dispatch，因为 saga 的任务队列可能还有其它 task 在前面。
+会将 action 加入调度中心，并不一定立即执行原生 dispatch，因为 saga 的任务队列可能还有其它 task 在前面。
 
 ### call
 
